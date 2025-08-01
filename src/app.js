@@ -1,5 +1,5 @@
-import express, { json } from "express";
-import { authRouter } from "./routes/auth.router";
+import express, { json } from 'express';
+import { authRouter } from './routes/auth.router';
 // import {
 //   corsMiddleware,
 //   errorMiddleware,
@@ -10,9 +10,9 @@ export const createApp = ({ authModel }) => {
   const app = express();
   app.use(json());
   // app.use(corsMiddleware());
-  app.disable("x-powered-by");
+  app.disable('x-powered-by');
 
-  app.use("/auth", authRouter({ authModel }));
+  app.use('/auth', authRouter({ authModel }));
 
   // app.use(errorMiddleware);
 

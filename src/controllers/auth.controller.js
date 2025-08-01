@@ -1,10 +1,10 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { Resend } from "resend";
-import { v4 as uuidv4 } from "uuid";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { Resend } from 'resend';
+import { v4 as uuidv4 } from 'uuid';
 
 export class AuthController {
-  constructor({ authModel }) {
+  constructor ({ authModel }) {
     this.authModel = authModel;
   }
 
@@ -17,7 +17,7 @@ export class AuthController {
     if (!(await bcrypt.compare(password, data.password_hash))) {
       res.status(401).json({
         success: false,
-        message: "Usuario o contraseña incorrectos",
+        message: 'Usuario o contraseña incorrectos'
       });
 
       return;
@@ -29,20 +29,20 @@ export class AuthController {
       const tokenTemporal = jwt.sign(
         {
           id: data.id,
-          password: data.password_hash,
+          password: data.password_hash
         },
         process.env.JWT_SECRET,
         {
-          expiresIn: "1h",
+          expiresIn: '1h'
         }
       );
 
       res.json({
         success: true,
-        message: "Debe cambiar su contraseña",
+        message: 'Debe cambiar su contraseña',
         data: {
-          token: tokenTemporal,
-        },
+          token: tokenTemporal
+        }
       });
 
       return;
@@ -52,32 +52,29 @@ export class AuthController {
 
     const payload = {
       id: data.id,
-      role: data.role,
+      role: data.role
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      algorithm: "HS256", // Sha2
-      expiresIn: "12h",
+      algorithm: 'HS256', // Sha2
+      expiresIn: '12h'
     });
 
     delete data.password_hash; // eliminar la contraseña del objeto de datos
 
     res.json({
       success: true,
-      message: "Usuario autenticado correctamente",
-      data: data,
-      token,
+      message: 'Usuario autenticado correctamente',
+      data,
+      token
     });
   };
 
   createUser = async (req, res) => {
-    const { name, email, phone, role } = req.body;
+    const { name, email, phone, role, password } = req.body;
 
     const id = uuidv4();
-
-    //generar una clave
-    //TODO: generar una clave aleatoria
-    const password_hash = await bcrypt.hash("1234", 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
     try {
       const result = await this.authModel.register([
@@ -85,8 +82,8 @@ export class AuthController {
         name,
         email,
         phone,
-        password_hash,
-        role,
+        passwordHash,
+        role
       ]);
 
       // TODO: envair correro
@@ -94,75 +91,74 @@ export class AuthController {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       await resend.emails.send({
-        from: "noreply@esshn.com",
+        from: 'noreply@esshn.com',
         to: email,
-        subject: "Creación de cuenta",
-        html: "<p>esta es tu clave temporal: <strong> 1234 </strong>  </p>",
+        subject: 'Creación de cuenta',
+        html: '<p>Tu cuenta ha sido creada correctamente.</p>'
       });
 
       res.json({
         success: true,
-        message: "Usuario creado correctamente",
+        message: 'Usuario creado correctamente',
         data: {
           id,
           name,
           email,
           phone,
           role,
-          must_change_password: true, // obligar a cambiar la contraseña
-        },
+          must_change_password: true // obligar a cambiar la contraseña
+        }
       });
     } catch (error) {
       console.error(error);
       res.status(400).json({
         success: false,
-        message: "Error al crear el usuario",
-        error: error.message,
+        message: 'Error al crear el usuario',
+        error: error.message
       });
     }
   };
 
   setPassword = async (req, res) => {
     const { authorization } = req.headers;
-    const token = authorization.split(" ")[1];
-    const { old_password, new_password, confirm_password } = req.body;
+    const token = authorization.split(' ')[1];
+    const { oldPassword, newPassword, confirmPassword } = req.body;
 
     try {
       const { id, password } = jwt.verify(token, process.env.JWT_SECRET);
 
-      if (!(await bcrypt.compare(old_password, password))) {
+      if (!(await bcrypt.compare(oldPassword, password))) {
         res.status(401).json({
           success: false,
-          message: "La contraseña anterior no es correcta",
+          message: 'La contraseña anterior no es correcta'
         });
 
         return;
       }
 
       // validar que las contraseñas nuevas coincidan
-      if (new_password !== confirm_password) {
+      if (newPassword !== confirmPassword) {
         res.status(400).json({
           success: false,
-          message: "Las contraseñas nuevas no coinciden",
+          message: 'Las contraseñas nuevas no coinciden'
         });
 
         return;
       }
 
-      const passwordHash = await bcrypt.hash(new_password, 10);
+      const passwordHash = await bcrypt.hash(newPassword, 10);
 
       await this.authModel.updatePassword(id, passwordHash);
 
       res.json({
         success: true,
-        message: "Contraseña actualizada correctamente",
+        message: 'Contraseña actualizada correctamente'
       });
     } catch (error) {
       res.status(401).json({
         success: false,
-        message: "Debe iniciar sesión para cambiar la contraseña",
+        message: 'Debe iniciar sesión para cambiar la contraseña'
       });
-      return;
     }
   };
 }

@@ -6,7 +6,7 @@
     "baseUrl": "src/",
     "checkJs": true,
     "paths": {
-      "*": ["node_modules/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["./"]
