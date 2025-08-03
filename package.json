@@ -8,21 +8,17 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js --cache",
-    "lint:fix": "pnpm run lint --fix"
+    "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
-    "@eslint/eslintrc": "3.3.1",
-    "@eslint/js": "9.32.0",
-    "eslint": "9.32.0",
+    "eslint": "8.56.0",
     "eslint-config-standard": "17.1.0",
-    "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-n": "17.21.3",
-    "eslint-plugin-promise": "7.2.1",
-    "standard": "17.1.2"
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-n": "16.4.0",
+    "eslint-plugin-promise": "6.1.1"
   },
   "dependencies": {
     "cors": "2.8.5",
