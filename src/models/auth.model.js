@@ -1,35 +1,43 @@
-export class AuthModel {
-  constructor ({ db }) {
-    this.db = db;
-  }
+import pool from "../config/connection.js";
 
-  loginUser = async (user) => {
-    // obtener el registro del usuario
-    const [results] = await this.db.query(
-      `SELECT BIN_TO_UUID(id) as id, name, email, phone, password_hash, must_change_password, created_at
-        FROM pubs_comments.users WHERE email = ?`,
-      [user]
+export const Usuario = {
+  async crear({ id, nombre, email, contraseña_hash }) {
+    const insertQuery = `
+      INSERT INTO usuarios (id, nombre, email, contraseña_hash)
+      VALUES (UUID_TO_BIN(?), ?, ?, ?)
+    `;
+    await pool.query(insertQuery, [id, nombre, email, contraseña_hash]);
+
+    const selectQuery = `
+      SELECT BIN_TO_UUID(id) AS id, nombre, email, creado_en
+      FROM usuarios
+      WHERE email = ?
+    `;
+    const [rows] = await pool.query(selectQuery, [email]);
+    return rows[0];
+  },
+
+  async buscarPorEmail(email) {
+    const [rows] = await pool.query(
+      `
+      SELECT BIN_TO_UUID(id) AS id, nombre, email, contraseña_hash
+      FROM usuarios
+      WHERE email = ?
+    `,
+      [email]
     );
+    return rows[0];
+  },
 
-    return results[0];
-  };
-
-  register = async (user) => {
-    const query = `INSERT INTO pubs_comments.users
-                    (id, name, email, phone, password_hash, must_change_password, created_at)
-                    VALUES(UUID_TO_BIN(?), ?, ?, ?, ?, 0, CURRENT_TIMESTAMP);`;
-
-    const [rows] = await this.db.query(query, [...user]);
-
-    return rows;
-  };
-
-  updatePassword = async (id, passwordHash) => {
-    const query = `UPDATE users SET password_hash = ?,
-              must_change_password = 0 WHERE id = UUID_TO_BIN(?)`;
-
-    const [rows] = await this.db.query(query, [passwordHash, id]);
-
-    return rows;
-  };
-}
+  async buscarPorId(id) {
+    const [rows] = await pool.query(
+      `
+      SELECT BIN_TO_UUID(id) AS id, nombre, email
+      FROM usuarios
+      WHERE id = UUID_TO_BIN(?)
+    `,
+      [id]
+    );
+    return rows[0];
+  },
+};

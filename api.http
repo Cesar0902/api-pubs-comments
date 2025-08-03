@@ -1,0 +1,60 @@
+### Registro de usuario
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "David Gevawer",
+  "email": "david@example.com",
+  "password": "miPassword123"
+}
+
+###
+
+### Login de usuario
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "david@example.com",
+  "password": "miPassword123"
+}
+
+###
+
+### Listar publicaciones (público)
+GET http://localhost:5000/publicaciones?page=1&limit=5
+
+###
+
+### Crear publicación (requiere token)
+POST http://localhost:5000/publicaciones
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI1ODQ4NCwiZXhwIjoxNzU0MjY1Njg0fQ._9CxqWzXQT_NPR1dNu2JMzbQdb0l0efuJ2Lo-o-in-c
+Content-Type: application/json
+
+{
+  "titulo": "Mi primera publicación",
+  "contenido": "Contenido de prueba para la publicación"
+}
+
+###
+
+### Ver publicación por ID (reemplaza el ID)
+GET http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+
+###
+
+### Editar publicación (requiere token y ser autor)
+PUT http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI1ODQ4NCwiZXhwIjoxNzU0MjY1Njg0fQ._9CxqWzXQT_NPR1dNu2JMzbQdb0l0efuJ2Lo-o-in-c
+Content-Type: application/json
+
+{
+  "titulo": "Título actualizado",
+  "contenido": "Contenido actualizado"
+}
+
+###
+
+### Eliminar publicación (requiere token y ser autor)
+DELETE http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI1ODQ4NCwiZXhwIjoxNzU0MjY1Njg0fQ._9CxqWzXQT_NPR1dNu2JMzbQdb0l0efuJ2Lo-o-in-c
