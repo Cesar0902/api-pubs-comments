@@ -4,6 +4,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import publicacionesRoutes from "./src/routes/publicaciones.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import comentariosRoutes from "./src/routes/comentarios.routes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/publicaciones", publicacionesRoutes);
+app.use("/publicaciones/:id/comentarios", comentariosRoutes);
 
 const PORT = process.env.PORT || 3000;
 
