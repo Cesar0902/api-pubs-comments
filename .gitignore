@@ -1,3 +1,4 @@
 node_modules
+package-lock.json
 .env
 API_Publicaciones_Comentarios.md
