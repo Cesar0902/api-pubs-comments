@@ -1,0 +1,6 @@
+- Implementar schemas de zod para validaciones.
+- Centralizar los errores en un archivo en la carpeta utils.
+- Implementar orden descendente por fecha de publicación.
+- Protección contra XSS.
+- Paginación de publicaciones.
+- Documentación de la API.
