@@ -55,8 +55,9 @@ export const authController = {
         return res.status(401).json({ error: "Credenciales inválidas" });
       }
 
+      // @ts-ignore
       const token = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, {
-        expiresIn: "2h",
+        expiresIn: process.env.JWT_EXPIRES_IN,
       });
 
       res.json({
