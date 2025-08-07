@@ -1,21 +1,25 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
+import { UserSchema } from "../schemas/auth.schema.js";
+import { validateSchema } from "../utils/validateSchema.js";
+import { 
+  BadRequestError, 
+  UnauthorizedError, 
+  ConflictError, 
+  NotFoundError 
+} from "../errors/customErrors.js";
 
 export const authController = {
   async register(req, res, next) {
     try {
       const { nombre, email, password } = req.body;
 
-      if (!nombre || !email || !password) {
-        return res
-          .status(400)
-          .json({ error: "Todos los campos son obligatorios" });
-      }
+      const validatedUser = validateSchema(UserSchema, req.body, "Datos de usuario inválidos");
 
-      const existente = await Usuario.buscarPorEmail(email);
+      const existente = await Usuario.buscarPorEmail(validatedUser.email);
       if (existente) {
-        return res.status(400).json({ error: "El correo ya está registrado" });
+        throw new ConflictError("El correo ya está registrado");
       }
 
       const { v4: uuidv4 } = await import("uuid");
@@ -41,24 +45,33 @@ export const authController = {
     try {
       const { email, password } = req.body;
 
+      // Validar que se proporcionaron email y password
       if (!email || !password) {
-        return res.status(400).json({ error: "Email y contraseña requeridos" });
+        throw new BadRequestError("Email y contraseña requeridos");
       }
 
+      // Buscar usuario
       const usuario = await Usuario.buscarPorEmail(email);
       if (!usuario) {
-        return res.status(401).json({ error: "Credenciales inválidas" });
+        throw new UnauthorizedError("Credenciales inválidas");
       }
 
+      // Verificar contraseña
       const coincide = await bcrypt.compare(password, usuario.contraseña_hash);
       if (!coincide) {
-        return res.status(401).json({ error: "Credenciales inválidas" });
+        throw new UnauthorizedError("Credenciales inválidas");
       }
 
+      // Generar token
+      if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET no está configurado");
+      }
+      
+      const jwtSecret = process.env.JWT_SECRET;
+      const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
+      
       // @ts-ignore
-      const token = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
+      const token = jwt.sign({ id: usuario.id }, jwtSecret, { expiresIn: jwtExpiresIn });
 
       res.json({
         token,
@@ -78,7 +91,7 @@ export const authController = {
       const { id } = req.params;
       const usuario = await Usuario.buscarPorId(id);
       if (!usuario) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
+        throw new NotFoundError("Usuario no encontrado");
       }
       res.json(usuario);
     } catch (err) {
