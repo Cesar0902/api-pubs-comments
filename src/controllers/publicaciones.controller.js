@@ -7,19 +7,27 @@ import sanitizarHtml from "../utils/sanitizarHtml.js";
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
     try {
-      const query = validateSchema(
-        PaginacionSchema,
-        req.query,
-        "Parámetros en el URL inválidos"
-      );
+      // const query = validateSchema(
+      //   PaginacionSchema,
+      //   req.query,
+      //   "Parámetros en el URL inválidos"
+      // );
 
-      const page = parseInt(query.page) || 1;
-      const limit = parseInt(query.limit) || 10;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const searchWord = req.query.searchWord
+        ? `%${req.query.searchWord}%`
+        : undefined;
+      console.log(searchWord);
 
       const offset = (page - 1) * limit;
 
       const total = await Publicacion.contar();
-      const publicaciones = await Publicacion.listar({ limit, offset });
+      let publicaciones = await Publicacion.listar({ limit, offset });
+
+      if (searchWord !== undefined) {
+        publicaciones = await Publicacion.buscarPorContenido(searchWord);
+      }
 
       res.json({ page, limit, total, publicaciones });
     } catch (err) {
@@ -55,7 +63,12 @@ export const publicacionesController = {
 
       const contenidoLimpio = sanitizarHtml(contenido);
 
-      await Publicacion.crear({ id, titulo, contenido: contenidoLimpio, usuario_id });
+      await Publicacion.crear({
+        id,
+        titulo,
+        contenido: contenidoLimpio,
+        usuario_id,
+      });
 
       res.status(201).json({ message: "Publicación creada", id });
     } catch (err) {
@@ -75,7 +88,7 @@ export const publicacionesController = {
           .json({ error: "Debe enviar título o contenido para actualizar" });
       }
 
-      const contenidoLimpio = sanitizarHtml(contenido)
+      const contenidoLimpio = sanitizarHtml(contenido);
 
       const autor = await Publicacion.buscarAutorPorId(id);
       if (!autor)

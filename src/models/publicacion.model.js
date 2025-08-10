@@ -48,6 +48,24 @@ export const Publicacion = {
     return rows[0];
   },
 
+  async buscarPorContenido(palabra) {
+    const [rows] = await pool.query(
+      `SELECT 
+        BIN_TO_UUID(p.id) AS id,
+        p.titulo,
+        p.contenido,
+        BIN_TO_UUID(p.usuario_id) AS usuario_id,
+        u.nombre AS autor,
+        p.creado_en,
+        p.actualizado_en
+      FROM publicaciones p
+      JOIN usuarios u ON p.usuario_id = u.id
+      WHERE p.contenido LIKE ?`,
+      [palabra]
+    );
+    return rows;
+  },
+
   async crear({ id, titulo, contenido, usuario_id }) {
     const [result] = await pool.query(
       `INSERT INTO publicaciones (id, titulo, contenido, usuario_id) VALUES (UUID_TO_BIN(?), ?, ?, UUID_TO_BIN(?))`,

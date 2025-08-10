@@ -22,12 +22,17 @@ Content-Type: application/json
 ###
 
 ### Listar publicaciones (público)
-GET http://localhost:5000/publicaciones?page=-1&limit=-5
+GET http://localhost:5000/publicaciones?page=1&limit=5
 
 ###
 
 ### Ver publicación por ID (reemplaza el ID)
 GET http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+
+###
+
+### Ver publicación por Contenido
+GET http://localhost:5000/publicaciones?searchWord=actualizado
 
 ###
 
