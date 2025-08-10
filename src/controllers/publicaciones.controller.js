@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Publicacion } from "../models/publicacion.model.js";
 import { PaginacionSchema } from "../schemas/paginacion.schema.js";
 import { validateSchema } from "../utils/validateSchema.js";
+import sanitizarHtml from "../utils/sanitizarHtml.js";
 
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
@@ -52,7 +53,9 @@ export const publicacionesController = {
 
       const id = uuidv4();
 
-      await Publicacion.crear({ id, titulo, contenido, usuario_id });
+      const contenidoLimpio = sanitizarHtml(contenido);
+
+      await Publicacion.crear({ id, titulo, contenido: contenidoLimpio, usuario_id });
 
       res.status(201).json({ message: "Publicación creada", id });
     } catch (err) {
@@ -72,6 +75,8 @@ export const publicacionesController = {
           .json({ error: "Debe enviar título o contenido para actualizar" });
       }
 
+      const contenidoLimpio = sanitizarHtml(contenido)
+
       const autor = await Publicacion.buscarAutorPorId(id);
       if (!autor)
         return res.status(404).json({ error: "Publicación no encontrada" });
@@ -82,7 +87,7 @@ export const publicacionesController = {
           .json({ error: "No tienes permiso para editar esta publicación" });
       }
 
-      await Publicacion.actualizar(id, { titulo, contenido });
+      await Publicacion.actualizar(id, { titulo, contenido: contenidoLimpio });
 
       res.json({ message: "Publicación actualizada" });
     } catch (err) {

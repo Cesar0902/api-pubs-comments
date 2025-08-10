@@ -1,15 +1,11 @@
-import sanitizarHtml from "../utils/sanitizarHtml.js";
 import pool from "../config/connection.js";
 
 export const Comentario = {
   async crear({ id, contenido, usuario_id, publicacion_id }) {
-
-    const contenidoLimpio = sanitizarHtml(contenido);
-
     const [result] = await pool.query(
       `INSERT INTO comentarios (id, contenido, usuario_id, publicacion_id)
       VALUES (UUID_TO_BIN(?), ?, UUID_TO_BIN(?), UUID_TO_BIN(?))`,
-      [id, contenidoLimpio, usuario_id, publicacion_id]
+      [id, contenido, usuario_id, publicacion_id]
     );
     return result;
   },

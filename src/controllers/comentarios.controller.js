@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { Comentario } from "../models/comentarios.model.js";
+import sanitizarHtml from "../utils/sanitizarHtml.js";
 
 export const comentariosController = {
   listarComentarios: async (req, res, next) => {
@@ -25,7 +26,10 @@ export const comentariosController = {
       }
 
       const id = uuidv4();
-      await Comentario.crear({ id, contenido, usuario_id, publicacion_id });
+
+      const contenidoLimpio = sanitizarHtml(contenido);
+
+      await Comentario.crear({ id, contenido: contenidoLimpio, usuario_id, publicacion_id });
 
       res.status(201).json({ message: "Comentario creado", id });
     } catch (err) {
