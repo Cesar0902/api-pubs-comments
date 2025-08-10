@@ -25,6 +25,13 @@ export const comentariosController = {
           .json({ error: "El contenido del comentario es obligatorio" });
       }
 
+      if ( contenido.length > 200 ) {
+        return res
+          .status(400)
+          .json({ error: "El contenido del comentario no puede ser mayor a 200 caracteres." });
+      }
+
+
       const id = uuidv4();
 
       const contenidoLimpio = sanitizarHtml(contenido);

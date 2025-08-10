@@ -93,7 +93,7 @@ server.js
 
 - Solo el autor de una publicación puede editarla o eliminarla. ✅
 - Los comentarios deben ser sanitizados para evitar ataques XSS. ✅
-- Los comentarios no requieren aprobación pero deben validarse (campos no vacíos, tamaño). ❌
+- Los comentarios no requieren aprobación pero deben validarse (campos no vacíos, tamaño). ✅
 - Las fechas deben guardarse automáticamente al crear o comentar. ✅
 
 ---
