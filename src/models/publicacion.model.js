@@ -1,3 +1,4 @@
+import sanitizarHtml from "../utils/sanitizarHtml.js";
 import pool from "../config/connection.js";
 
 export const Publicacion = {
@@ -49,9 +50,12 @@ export const Publicacion = {
   },
 
   async crear({ id, titulo, contenido, usuario_id }) {
+
+    const contenidoLimpio = sanitizarHtml(contenido);
+
     const [result] = await pool.query(
       `INSERT INTO publicaciones (id, titulo, contenido, usuario_id) VALUES (UUID_TO_BIN(?), ?, ?, UUID_TO_BIN(?))`,
-      [id, titulo, contenido, usuario_id]
+      [id, titulo, contenidoLimpio, usuario_id]
     );
     return result;
   },
@@ -65,8 +69,9 @@ export const Publicacion = {
       params.push(titulo);
     }
     if (contenido !== undefined) {
+      const contenidoLimpio = sanitizarHtml(contenido)
       updates.push("contenido = ?");
-      params.push(contenido);
+      params.push(contenidoLimpio);
     }
 
     if (updates.length === 0) return null;
