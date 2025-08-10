@@ -1,11 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
 import { Publicacion } from "../models/publicacion.model.js";
+import { PaginacionSchema } from "../schemas/paginacion.schema.js";
+import { validateSchema } from "../utils/validateSchema.js";
 
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
+      const query = validateSchema(
+        PaginacionSchema,
+        req.query,
+        "Parámetros en el URL inválidos"
+      );
+
+      const page = parseInt(query.page) || 1;
+      const limit = parseInt(query.limit) || 10;
+
       const offset = (page - 1) * limit;
 
       const total = await Publicacion.contar();

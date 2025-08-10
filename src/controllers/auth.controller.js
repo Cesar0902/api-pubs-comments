@@ -3,19 +3,23 @@ import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
 import { UserSchema } from "../schemas/auth.schema.js";
 import { validateSchema } from "../utils/validateSchema.js";
-import { 
-  BadRequestError, 
-  UnauthorizedError, 
-  ConflictError, 
-  NotFoundError 
-} from "../errors/customErrors.js";
+import {
+  BadRequestError,
+  UnauthorizedError,
+  ConflictError,
+  NotFoundError,
+} from "../utils/customErrors.js";
 
 export const authController = {
   async register(req, res, next) {
     try {
       const { nombre, email, password } = req.body;
 
-      const validatedUser = validateSchema(UserSchema, req.body, "Datos de usuario inválidos");
+      const validatedUser = validateSchema(
+        UserSchema,
+        req.body,
+        "Datos de usuario inválidos"
+      );
 
       const existente = await Usuario.buscarPorEmail(validatedUser.email);
       if (existente) {
@@ -66,12 +70,14 @@ export const authController = {
       if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET no está configurado");
       }
-      
+
       const jwtSecret = process.env.JWT_SECRET;
-      const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '24h';
-      
+      const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "24h";
+
       // @ts-ignore
-      const token = jwt.sign({ id: usuario.id }, jwtSecret, { expiresIn: jwtExpiresIn });
+      const token = jwt.sign({ id: usuario.id }, jwtSecret, {
+        expiresIn: jwtExpiresIn,
+      });
 
       res.json({
         token,
