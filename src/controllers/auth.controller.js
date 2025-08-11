@@ -9,6 +9,7 @@ import {
   ConflictError,
   NotFoundError,
 } from "../utils/customErrors.js";
+import ResponseHandler from "../utils/responseHandler.js";
 
 export const authController = {
   async register(req, res, next) {
@@ -37,9 +38,10 @@ export const authController = {
         contraseña_hash: hash,
       });
 
-      res
-        .status(201)
-        .json({ message: "Usuario registrado correctamente", usuario });
+      return ResponseHandler.created(res, {
+        message: "Usuario registrado correctamente",
+        usuario,
+      });
     } catch (err) {
       next(err);
     }
@@ -49,24 +51,16 @@ export const authController = {
     try {
       const { email, password } = req.body;
 
-      // Validar que se proporcionaron email y password
       if (!email || !password) {
         throw new BadRequestError("Email y contraseña requeridos");
       }
 
-      // Buscar usuario
       const usuario = await Usuario.buscarPorEmail(email);
-      if (!usuario) {
-        throw new UnauthorizedError("Credenciales inválidas");
-      }
+      if (!usuario) throw new UnauthorizedError("Credenciales inválidas");
 
-      // Verificar contraseña
       const coincide = await bcrypt.compare(password, usuario.contraseña_hash);
-      if (!coincide) {
-        throw new UnauthorizedError("Credenciales inválidas");
-      }
+      if (!coincide) throw new UnauthorizedError("Credenciales inválidas");
 
-      // Generar token
       if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET no está configurado");
       }
@@ -79,7 +73,7 @@ export const authController = {
         expiresIn: jwtExpiresIn,
       });
 
-      res.json({
+      return ResponseHandler.ok(res, {
         token,
         usuario: {
           id: usuario.id,
@@ -96,10 +90,8 @@ export const authController = {
     try {
       const { id } = req.params;
       const usuario = await Usuario.buscarPorId(id);
-      if (!usuario) {
-        throw new NotFoundError("Usuario no encontrado");
-      }
-      res.json(usuario);
+      if (!usuario) throw new NotFoundError("Usuario no encontrado");
+      return ResponseHandler.ok(res, usuario);
     } catch (err) {
       next(err);
     }
