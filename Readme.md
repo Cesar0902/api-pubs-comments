@@ -383,51 +383,89 @@ Content-Type: application/json
 
 ## 🧪 Ejemplos de Uso
 
-### 1. Registro y Login
+Se incluye un archivo api.http en el directorio raiz que contiene ejemplos de uso de la API.
+
+Tambien puede usar las siguientes comandos en la terminal:
+
+# Registro de usuario
 ```bash
-# Registro
 curl -X POST http://localhost:5000/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "nombre": "Juan Pérez",
-    "email": "juan@example.com",
-    "password": "MiPassword123@"
+    "nombre": "David Gevawer",
+    "email": "david@example.com",
+    "password": "miPassword123"
   }'
+  ```
 
-# Login
+# Login de usuario
+```bash
 curl -X POST http://localhost:5000/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "juan@example.com",
-    "password": "MiPassword123@"
+    "email": "david@example.com",
+    "password": "miPassword123"
   }'
+  ```
+
+# Listar publicaciones (público)
+```bash
+curl "http://localhost:5000/publicaciones?page=1&limit=5"
 ```
 
-### 2. Crear Publicación
+# Ver publicación por ID
+```bash
+curl "http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1"
+```
+
+# Ver publicación por contenido
+```bash
+curl "http://localhost:5000/publicaciones?searchWord=actualizado"
+```
+
+# Crear publicación (requiere token)
 ```bash
 curl -X POST http://localhost:5000/publicaciones \
   -H "Authorization: Bearer <tu_token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "titulo": "Mi primera publicación",
-    "contenido": "Contenido de la publicación..."
+    "titulo": "Mi segunda publicación",
+    "contenido": "Contenido de prueba para la publicación"
   }'
-```
+  ```
 
-### 3. Listar Publicaciones con Búsqueda
+# Editar publicación (requiere token y ser autor)
 ```bash
-curl "http://localhost:5000/publicaciones?page=1&limit=5&searchWord=API"
-```
-
-### 4. Crear Comentario
-```bash
-curl -X POST http://localhost:5000/publicaciones/{id}/comentarios \
+curl -X PUT http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da \
   -H "Authorization: Bearer <tu_token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "contenido": "Este es mi comentario..."
+    "titulo": "Título actualizado",
+    "contenido": "Contenido actualizado"
   }'
-```
+  ```
+
+# Eliminar publicación (requiere token y ser autor)
+```bash
+curl -X DELETE http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1 \
+  -H "Authorization: Bearer <tu_token>"
+  ```
+
+# Ver comentarios de una publicación (ruta pública)
+```bash
+curl "http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios" \
+  -H "Content-Type: application/json"
+  ```
+
+# Crear un comentario (requiere token JWT)
+```bash
+curl -X POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <tu_token>" \
+  -d '{
+    "contenido": "Este es un comentario de prueba desde cURL"
+  }'
+  ```
 
 ---
 
@@ -481,7 +519,3 @@ PORT=5000
 ```
 
 ---
-
-## 📞 Soporte
-
-Para reportar bugs o solicitar nuevas funcionalidades, crea un issue en el repositorio del proyecto.
