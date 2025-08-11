@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Publicacion } from "../models/publicacion.model.js";
 import { validatePaginacion } from "../schemas/paginacion.schema.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
-import { validatePublicaciones } from "../schemas/publicaciones.schema.js";
+import { validateId, validatePublicaciones } from "../schemas/publicaciones.schema.js";
 import ResponseHandler from "../utils/responseHandler.js";
 
 export const publicacionesController = {
@@ -41,7 +41,15 @@ export const publicacionesController = {
   verPublicacion: async (req, res, next) => {
     try {
       const { id } = req.params;
-      
+
+      const { success, error } = validateId(id);
+      if (!success) {
+        const formattedErrors = error.issues.map(err => ({
+          message: err.message
+        }));
+        return ResponseHandler.BadRequest(res, "ID de publicación inválido", formattedErrors);
+      }
+
       const publicacion = await Publicacion.buscarPorId(id);
       if (!publicacion) {
         return ResponseHandler.NotFound(res, "Publicación no encontrada");
@@ -55,10 +63,16 @@ export const publicacionesController = {
   crearPublicacion: async (req, res, next) => {
     try {
       const data = req.body;
-      const { success, error, data: { titulo, contenido }} = validatePublicaciones(data)
+      const { success, error, data: validatedData } = validatePublicaciones(data)
       if (!success) {
-        return ResponseHandler.BadRequest(res, "Datos de publicación inválidos", error);
+        const formattedErrors = error.issues.map(err => ({
+          field: err.path.join('.'),
+          message: err.message
+        }));
+        return ResponseHandler.BadRequest(res, "Datos de publicación inválidos", formattedErrors);
       }
+
+      const { titulo, contenido } = validatedData;
 
       const usuario_id = req.user.id;
 
