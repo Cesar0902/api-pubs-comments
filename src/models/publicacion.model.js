@@ -60,8 +60,7 @@ export const Publicacion = {
         p.actualizado_en
       FROM publicaciones p
       JOIN usuarios u ON p.usuario_id = u.id
-      WHERE LOWER(p.contenido) LIKE %LOWER(?)%
-         OR LOWER(p.titulo) LIKE %LOWER(?)%`,
+      WHERE p.contenido LIKE %?%`,
       [palabra]
     );
     return rows;

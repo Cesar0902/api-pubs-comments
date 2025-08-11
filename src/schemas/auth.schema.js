@@ -1,9 +1,14 @@
-import { z } from "zod";
+import zod from "zod";
 
-export const UserSchema = z.object({
-  nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Formato de email inválido"),
-  password: z.string("La contraseña es requerida")
+const userSchema = zod.object({
+  nombre: zod
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres"),
+  email: zod
+    .string()
+    .email("Formato de email inválido"),
+  password: zod
+    .string("La contraseña es requerida")
     .min(8, "Mínimo 8 caracteres")
     .max(20, "Máximo 20 caracteres")
     .regex(/[A-Z]/, "Requiere al menos una mayúscula")
@@ -11,6 +16,6 @@ export const UserSchema = z.object({
     .regex(/[!@#$%^&*]/, "Requiere al menos un carácter especial")
 });
 
-export const validateUser = (user) => {
-    return UserSchema.safeParse(user)
+export function validateUsuario(usuario) {
+  return userSchema.safeParse(usuario)
 }

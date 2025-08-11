@@ -1,30 +1,18 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
-import { UserSchema, validateUser } from "../schemas/auth.schema.js";
 import ResponseHandler from "../utils/responseHandler.js";
+import { validateUsuario } from "../schemas/auth.schema.js";
 
 export const authController = {
   async register(req, res, next) {
     try {
-      const parsed = validateUser(req.body);
+      const data = req.body;
 
-      if (!parsed.success) {
-        // Formateamos los errores de Zod
-        const details = parsed.error.issues.map(i => ({
-          field: i.path.join('.'),
-          code: i.code,
-          message: i.message,
-        }));
-
-        return ResponseHandler.BadRequest(
-          res,
-          'Datos inválidos en la solicitud',
-          details
-        );
+      const { success, error, data: {nombre, email, password} } = validateUsuario(data)
+      if (!success) {
+        res.status(400).json(error)
       }
-
-      const { nombre, email, password } = parsed.data;
 
       const existente = await Usuario.buscarPorEmail(email);
       if (existente) {
