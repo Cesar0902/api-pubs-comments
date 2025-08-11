@@ -11,6 +11,7 @@ export const Publicacion = {
 
     return rows[0] || 0;
   },
+
   async listar({ limit = 10, offset = 0 }) {
     const [rows] = await pool.query(
       `SELECT 
@@ -48,7 +49,18 @@ export const Publicacion = {
     return rows[0];
   },
 
-  async buscarPorContenido(palabra) {
+  async contarPorContenido(palabra) {
+    const [rows] = await pool.query(
+      `SELECT COUNT(*) AS total
+      FROM publicaciones p
+      WHERE p.contenido LIKE CONCAT('%', ?, '%')
+          OR p.titulo   LIKE CONCAT('%', ?, '%')`,
+      [palabra, palabra]
+    );
+    return rows[0].total;
+  },
+
+  async buscarPorContenido(palabra, { limit = 10, offset = 0 }) {
     const [rows] = await pool.query(
       `SELECT 
         BIN_TO_UUID(p.id) AS id,
@@ -60,8 +72,11 @@ export const Publicacion = {
         p.actualizado_en
       FROM publicaciones p
       JOIN usuarios u ON p.usuario_id = u.id
-      WHERE p.contenido LIKE %?%`,
-      [palabra]
+      WHERE p.contenido LIKE CONCAT('%', ?, '%')
+        OR p.titulo   LIKE CONCAT('%', ?, '%')
+      ORDER BY p.creado_en DESC
+      LIMIT ? OFFSET ?`,
+      [palabra, palabra, limit, offset]
     );
     return rows;
   },

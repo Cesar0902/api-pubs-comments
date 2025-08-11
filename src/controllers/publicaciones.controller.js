@@ -8,9 +8,9 @@ import ResponseHandler from "../utils/responseHandler.js";
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
     try {
-      const data = req.query
+      const query = req.query;
 
-      const { success, error, data: validatedData } = validatePaginacion(data)
+      const { success, error, data: validated } = validatePaginacion(query);
       if (!success) {
         const formattedErrors = error.issues.map(err => ({
           field: err.path.join('.'),
@@ -19,15 +19,17 @@ export const publicacionesController = {
         return ResponseHandler.BadRequest(res, "Parámetros de paginación inválidos", formattedErrors);
       }
 
-      const { page, limit, searchWord } = validatedData;
-
+      const { page, limit, searchWord } = validated;
       const offset = (page - 1) * limit;
 
-      const total = await Publicacion.contar();
-      let publicaciones = await Publicacion.listar({ limit, offset });
+      let total, publicaciones;
 
-      if (searchWord !== undefined) {
-        publicaciones = await Publicacion.buscarPorContenido(searchWord);
+      if (searchWord && searchWord.trim() !== '') {
+        total = await Publicacion.contarPorContenido(searchWord);
+        publicaciones = await Publicacion.buscarPorContenido(searchWord, { limit, offset });
+      } else {
+        total = await Publicacion.contar();
+        publicaciones = await Publicacion.listar({ limit, offset });
       }
 
       return ResponseHandler.ok(res, { page, limit, total, publicaciones });
@@ -39,6 +41,7 @@ export const publicacionesController = {
   verPublicacion: async (req, res, next) => {
     try {
       const { id } = req.params;
+      
       const publicacion = await Publicacion.buscarPorId(id);
       if (!publicacion) {
         return ResponseHandler.NotFound(res, "Publicación no encontrada");
