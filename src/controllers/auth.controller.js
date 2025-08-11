@@ -62,7 +62,10 @@ export const authController = {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        throw new BadRequestError("Email y contraseña requeridos");
+        return ResponseHandler.BadRequest(
+          res,
+          "Email y contraseña son requeridos"
+        );
       }
 
       const usuario = await Usuario.buscarPorEmail(email);
