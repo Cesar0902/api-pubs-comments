@@ -3,6 +3,7 @@ import { Publicacion } from "../models/publicacion.model.js";
 import { validatePaginacion } from "../schemas/paginacion.schema.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
 import { validatePublicaciones } from "../schemas/publicaciones.schema.js";
+import ResponseHandler from "../utils/responseHandler.js";
 
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
@@ -11,7 +12,7 @@ export const publicacionesController = {
 
       const { success, error, data: { page, limit, searchWord }} = validatePaginacion(data)
       if (!success) {
-        res.status(400).json(error)
+        return ResponseHandler.BadRequest(res, "Parámetros de paginación inválidos", error);
       }
 
       const offset = (page - 1) * limit;
@@ -23,7 +24,7 @@ export const publicacionesController = {
         publicaciones = await Publicacion.buscarPorContenido(searchWord);
       }
 
-      res.json({ page, limit, total, publicaciones });
+      return ResponseHandler.ok(res, { page, limit, total, publicaciones });
     } catch (err) {
       next(err);
     }
@@ -34,9 +35,9 @@ export const publicacionesController = {
       const { id } = req.params;
       const publicacion = await Publicacion.buscarPorId(id);
       if (!publicacion) {
-        return res.status(404).json({ error: "Publicación no encontrada" });
+        return ResponseHandler.NotFound(res, "Publicación no encontrada");
       }
-      res.json(publicacion);
+      return ResponseHandler.ok(res, publicacion);
     } catch (err) {
       next(err);
     }
@@ -47,7 +48,7 @@ export const publicacionesController = {
       const data = req.body;
       const { success, error, data: { titulo, contenido }} = validatePublicaciones(data)
       if (!success) {
-        res.status(400).json(error)
+        return ResponseHandler.BadRequest(res, "Datos de publicación inválidos", error);
       }
 
       const usuario_id = req.user.id;
@@ -63,7 +64,7 @@ export const publicacionesController = {
         usuario_id,
       });
 
-      res.status(201).json({ message: "Publicación creada", id });
+      return ResponseHandler.created(res, { message: "Publicación creada", id });
     } catch (err) {
       next(err);
     }
@@ -77,24 +78,22 @@ export const publicacionesController = {
 
       const { success, error, data: { titulo, contenido }} = validatePublicaciones(data)
       if (!success) {
-        res.status(400).json(error)
+        return ResponseHandler.BadRequest(res, "Datos de publicación inválidos", error);
       }
 
       const contenidoLimpio = sanitizarHtml(contenido);
 
       const autor = await Publicacion.buscarAutorPorId(id);
       if (!autor)
-        return res.status(404).json({ error: "Publicación no encontrada" });
+        return ResponseHandler.NotFound(res, "Publicación no encontrada");
 
       if (autor.usuario_id !== usuario_id) {
-        return res
-          .status(403)
-          .json({ error: "No tienes permiso para editar esta publicación" });
+        return ResponseHandler.Forbidden(res, "No tienes permiso para editar esta publicación");
       }
 
       await Publicacion.actualizar(id, { titulo, contenido: contenidoLimpio });
 
-      res.json({ message: "Publicación actualizada" });
+      return ResponseHandler.ok(res, { message: "Publicación actualizada" });
     } catch (err) {
       next(err);
     }
@@ -107,17 +106,15 @@ export const publicacionesController = {
 
       const autor = await Publicacion.buscarAutorPorId(id);
       if (!autor)
-        return res.status(404).json({ error: "Publicación no encontrada" });
+        return ResponseHandler.NotFound(res, "Publicación no encontrada");
 
       if (autor.usuario_id !== usuario_id) {
-        return res
-          .status(403)
-          .json({ error: "No tienes permiso para eliminar esta publicación" });
+        return ResponseHandler.Forbidden(res, "No tienes permiso para eliminar esta publicación");
       }
 
       await Publicacion.eliminar(id);
 
-      res.json({ message: "Publicación eliminada" });
+      return ResponseHandler.ok(res, { message: "Publicación eliminada" });
     } catch (err) {
       next(err);
     }

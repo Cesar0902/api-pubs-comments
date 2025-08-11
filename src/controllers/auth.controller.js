@@ -11,7 +11,7 @@ export const authController = {
 
       const { success, error, data: {nombre, email, password} } = validateUsuario(data)
       if (!success) {
-        res.status(400).json(error)
+        return ResponseHandler.BadRequest(res, "Datos de usuario inválidos", error);
       }
 
       const existente = await Usuario.buscarPorEmail(email);
