@@ -1,8 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
-import { UserSchema } from "../schemas/auth.schema.js";
-import { validateSchema } from "../utils/validateSchema.js";
+import { UserSchema, validateUser } from "../schemas/auth.schema.js";
 import {
   BadRequestError,
   UnauthorizedError,
@@ -14,17 +13,28 @@ import ResponseHandler from "../utils/responseHandler.js";
 export const authController = {
   async register(req, res, next) {
     try {
-      const { nombre, email, password } = req.body;
+      const parsed = validateUser(req.body);
 
-      const validatedUser = validateSchema(
-        UserSchema,
-        req.body,
-        "Datos de usuario inválidos"
-      );
+      if (!parsed.success) {
+        // Formateamos los errores de Zod
+        const details = parsed.error.issues.map(i => ({
+          field: i.path.join('.'),
+          code: i.code,
+          message: i.message,
+        }));
 
-      const existente = await Usuario.buscarPorEmail(validatedUser.email);
+        return ResponseHandler.BadRequest(
+          res,
+          'Datos inválidos en la solicitud',
+          details
+        );
+      }
+
+      const { nombre, email, password } = parsed.data;
+
+      const existente = await Usuario.buscarPorEmail(email);
       if (existente) {
-        throw new ConflictError("El correo ya está registrado");
+        return ResponseHandler.Conflict(res, "El correo ya está registrado");
       }
 
       const { v4: uuidv4 } = await import("uuid");

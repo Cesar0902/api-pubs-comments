@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { Publicacion } from "../models/publicacion.model.js";
 import { PaginacionSchema } from "../schemas/paginacion.schema.js";
-import { validateSchema } from "../utils/validateSchema.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
 
 export const publicacionesController = {

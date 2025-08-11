@@ -10,3 +10,7 @@ export const UserSchema = z.object({
     .regex(/[0-9]/, "Requiere al menos un número")
     .regex(/[!@#$%^&*]/, "Requiere al menos un carácter especial")
 });
+
+export const validateUser = (user) => {
+    return UserSchema.safeParse(user)
+}
