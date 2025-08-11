@@ -2,12 +2,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
 import { UserSchema, validateUser } from "../schemas/auth.schema.js";
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ConflictError,
-  NotFoundError,
-} from "../utils/customErrors.js";
 import ResponseHandler from "../utils/responseHandler.js";
 
 export const authController = {
@@ -69,10 +63,16 @@ export const authController = {
       }
 
       const usuario = await Usuario.buscarPorEmail(email);
-      if (!usuario) throw new UnauthorizedError("Credenciales inválidas");
+      if (!usuario) return ResponseHandler.Unauthorized(
+        res,
+        "Credenciales inválidas"
+      );
 
       const coincide = await bcrypt.compare(password, usuario.contraseña_hash);
-      if (!coincide) throw new UnauthorizedError("Credenciales inválidas");
+      if (!coincide) return ResponseHandler.Unauthorized(
+        res,
+        "Credenciales inválidas"
+      );
 
       if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET no está configurado");
@@ -103,7 +103,10 @@ export const authController = {
     try {
       const { id } = req.params;
       const usuario = await Usuario.buscarPorId(id);
-      if (!usuario) throw new NotFoundError("Usuario no encontrado");
+      if (!usuario) return ResponseHandler.NotFound(
+        res,
+        "Usuario no encontrado"
+      );
       return ResponseHandler.ok(res, usuario);
     } catch (err) {
       next(err);
