@@ -1,27 +1,25 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
-import { UserSchema } from "../schemas/auth.schema.js";
-import { validateSchema } from "../utils/validateSchema.js";
 import {
   BadRequestError,
   UnauthorizedError,
   ConflictError,
   NotFoundError,
 } from "../utils/customErrors.js";
+import { validateUsuario } from "../schemas/auth.schema.js";
 
 export const authController = {
   async register(req, res, next) {
     try {
-      const { nombre, email, password } = req.body;
+      const data = req.body;
 
-      const validatedUser = validateSchema(
-        UserSchema,
-        req.body,
-        "Datos de usuario inválidos"
-      );
+      const { success, error, data: {nombre, email, password} } = validateUsuario(data)
+      if (!success) {
+        res.status(400).json(error)
+      }
 
-      const existente = await Usuario.buscarPorEmail(validatedUser.email);
+      const existente = await Usuario.buscarPorEmail(email);
       if (existente) {
         throw new ConflictError("El correo ya está registrado");
       }
