@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Comentario } from "../models/comentarios.model.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
+import { validateComentarios } from "../schemas/comentarios.schema.js";
 
 export const comentariosController = {
   listarComentarios: async (req, res, next) => {
@@ -15,25 +16,17 @@ export const comentariosController = {
 
   crearComentario: async (req, res, next) => {
     try {
-      const { contenido } = req.body;
+      const data = req.body;
+
+      const { success, error, data: { contenido } } = validateComentarios(data)
+      if (!success) {
+          res.status(400).json(error)
+      }
+
       const usuario_id = req.user.id;
       const publicacion_id = req.params.id;
 
-      if (!contenido || contenido.trim() === "") {
-        return res
-          .status(400)
-          .json({ error: "El contenido del comentario es obligatorio" });
-      }
-
-      if ( contenido.length > 200 ) {
-        return res
-          .status(400)
-          .json({ error: "El contenido del comentario no puede ser mayor a 200 caracteres." });
-      }
-
-
       const id = uuidv4();
-
       const contenidoLimpio = sanitizarHtml(contenido);
 
       await Comentario.crear({ id, contenido: contenidoLimpio, usuario_id, publicacion_id });
