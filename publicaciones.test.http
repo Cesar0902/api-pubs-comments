@@ -1,0 +1,125 @@
+### Pruebas de Publicaciones
+
+### Listar publicaciones (público) - Primera página
+GET http://localhost:5000/publicaciones?page=1&limit=5
+
+###
+
+### Listar publicaciones (público) - Segunda página
+GET http://localhost:5000/publicaciones?page=2&limit=3
+
+###
+
+### Listar publicaciones sin paginación (usar valores por defecto)
+GET http://localhost:5000/publicaciones
+
+###
+
+### Buscar publicaciones por palabra clave
+GET http://localhost:5000/publicaciones?searchWord=actualizado
+
+###
+
+### Buscar publicaciones por otra palabra clave
+GET http://localhost:5000/publicaciones?searchWord=prueba
+
+###
+
+### Ver publicación por ID válido
+GET http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+
+###
+
+### Ver publicación por ID inexistente (debería fallar)
+GET http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000
+
+###
+
+### Ver publicación con ID inválido (debería fallar)
+GET http://localhost:5000/publicaciones/id-invalido
+
+###
+
+### Crear publicación (requiere token) - CAMBIAR TOKEN POR UNO VÁLIDO
+POST http://localhost:5000/publicaciones
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+Content-Type: application/json
+
+{
+  "titulo": "Mi primera publicación de prueba",
+  "contenido": "Contenido de prueba para la publicación número uno"
+}
+
+###
+
+### Crear publicación sin token (debería fallar)
+POST http://localhost:5000/publicaciones
+Content-Type: application/json
+
+{
+  "titulo": "Publicación sin autenticación",
+  "contenido": "Esta publicación no debería crearse"
+}
+
+###
+
+### Crear publicación con datos faltantes (debería fallar)
+POST http://localhost:5000/publicaciones
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+Content-Type: application/json
+
+{
+  "titulo": "Solo título sin contenido"
+}
+
+###
+
+### Editar publicación (requiere token y ser autor) - CAMBIAR ID Y TOKEN POR VÁLIDOS
+PUT http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+Content-Type: application/json
+
+{
+  "titulo": "Título actualizado en las pruebas",
+  "contenido": "Contenido completamente actualizado desde las pruebas"
+}
+
+###
+
+### Editar publicación sin token (debería fallar)
+PUT http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da
+Content-Type: application/json
+
+{
+  "titulo": "Intento de edición sin autorización",
+  "contenido": "Esta edición no debería funcionar"
+}
+
+###
+
+### Editar publicación de otro usuario (debería fallar)
+PUT http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da
+Authorization: Bearer TOKEN_DE_OTRO_USUARIO
+Content-Type: application/json
+
+{
+  "titulo": "Intento de edición por otro usuario",
+  "contenido": "Esta edición no debería permitirse"
+}
+
+###
+
+### Eliminar publicación (requiere token y ser autor) - CAMBIAR ID Y TOKEN POR VÁLIDOS
+DELETE http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+###
+
+### Eliminar publicación sin token (debería fallar)
+DELETE http://localhost:5000/publicaciones/786d6f78-261f-4f78-af7e-8b0cc40baea1
+
+###
+
+### Eliminar publicación inexistente (debería fallar)
+DELETE http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg

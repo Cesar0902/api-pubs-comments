@@ -1,0 +1,77 @@
+### Pruebas de Autenticación
+
+### Registro de usuario
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "David Gevawer",
+  "email": "david@example.com",
+  "password": "miPassword123@"
+}
+
+###
+
+### Registro de usuario con email duplicado (debería fallar)
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Juan Perez",
+  "email": "david@example.com",
+  "password": "otraPassword456"
+}
+
+###
+
+### Registro con datos faltantes (debería fallar)
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Usuario Sin Email",
+  "password": "pasSword123@"
+}
+
+###
+
+### Login de usuario válido
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "david@example.com",
+  "password": "miPassword123@"
+}
+
+###
+
+### Login con credenciales incorrectas (debería fallar)
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "david@example.com",
+  "password": "passwordIncorrecta"
+}
+
+###
+
+### Login con email inexistente (debería fallar)
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "inexistente@example.com",
+  "password": "miPassword123"
+}
+
+###
+
+### Login con datos faltantes (debería fallar)
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "david@example.com"
+}

@@ -9,10 +9,16 @@ export const authController = {
     try {
       const data = req.body;
 
-      const { success, error, data: {nombre, email, password} } = validateUsuario(data)
+      const { success, error, data: validatedData } = validateUsuario(data)
       if (!success) {
-        return ResponseHandler.BadRequest(res, "Datos de usuario inválidos", error);
+        const formattedErrors = error.issues.map(err => ({
+          field: err.path.join('.'),
+          message: err.message
+        }));
+        return ResponseHandler.BadRequest(res, "Datos de usuario inválidos", formattedErrors);
       }
+
+      const { nombre, email, password } = validatedData;
 
       const existente = await Usuario.buscarPorEmail(email);
       if (existente) {

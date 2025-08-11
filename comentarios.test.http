@@ -1,0 +1,93 @@
+### Pruebas de Comentarios
+
+### Ver comentarios de una publicación (ruta pública)
+GET http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+
+###
+
+### Ver comentarios de publicación inexistente (debería fallar)
+GET http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000/comentarios
+Content-Type: application/json
+
+###
+
+### Ver comentarios con ID de publicación inválido (debería fallar)
+GET http://localhost:5000/publicaciones/id-invalido/comentarios
+Content-Type: application/json
+
+###
+
+### Crear un comentario (requiere token JWT) - CAMBIAR TOKEN POR UNO VÁLIDO
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": "Este es un comentario de prueba desde el archivo de tests"
+}
+
+###
+
+### Crear comentario con contenido más largo
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": "Este es un comentario más largo para probar el sistema de comentarios. Incluye múltiples oraciones y busca validar que el contenido se guarde correctamente en la base de datos."
+}
+
+###
+
+### Crear comentario sin token (debería fallar)
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+
+{
+  "contenido": "Este comentario no debería crearse porque no hay token de autenticación"
+}
+
+###
+
+### Crear comentario sin contenido (debería fallar)
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": ""
+}
+
+###
+
+### Crear comentario con contenido solo espacios (debería fallar)
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": "   "
+}
+
+###
+
+### Crear comentario en publicación inexistente (debería fallar)
+POST http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": "Este comentario no debería crearse porque la publicación no existe"
+}
+
+###
+
+### Crear comentario con contenido que incluye HTML para probar sanitización
+POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+
+{
+  "contenido": "Este comentario tiene <script>alert('XSS')</script> código HTML que debería ser sanitizado <b>correctamente</b>"
+}
