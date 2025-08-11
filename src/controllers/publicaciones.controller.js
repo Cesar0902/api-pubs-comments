@@ -1,19 +1,24 @@
 import { v4 as uuidv4 } from "uuid";
 import { Publicacion } from "../models/publicacion.model.js";
-import { validatePaginacion } from "../schemas/paginacion.schema.js";
+import { PaginacionSchema } from "../schemas/paginacion.schema.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
-import { validatePublicaciones } from "../schemas/publicaciones.schema.js";
 
 export const publicacionesController = {
   listarPublicaciones: async (req, res, next) => {
     try {
-      const data = req.query
+      // const query = validateSchema(
+      //   PaginacionSchema,
+      //   req.query,
+      //   "Parámetros en el URL inválidos"
+      // );
 
-      const { success, error, data: { page, limit, searchWord }} = validatePaginacion(data)
-      if (!success) {
-        res.status(400).json(error)
-      }
- 
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const searchWord = req.query.searchWord
+        ? `%${req.query.searchWord}%`
+        : undefined;
+      console.log(searchWord);
+
       const offset = (page - 1) * limit;
 
       const total = await Publicacion.contar();
@@ -44,13 +49,14 @@ export const publicacionesController = {
 
   crearPublicacion: async (req, res, next) => {
     try {
-      const data = req.body;
-      const { success, error, data: { titulo, contenido }} = validatePublicaciones(data)
-      if (!success) {
-        res.status(400).json(error)
-      }
-
+      const { titulo, contenido } = req.body;
       const usuario_id = req.user.id;
+
+      if (!titulo || !contenido) {
+        return res
+          .status(400)
+          .json({ error: "Título y contenido son obligatorios" });
+      }
 
       const id = uuidv4();
 
@@ -73,10 +79,12 @@ export const publicacionesController = {
     try {
       const { id } = req.params;
       const usuario_id = req.user.id;
-      const data = req.body;
-      const { success, error, data: { titulo, contenido }} = validatePublicaciones(data)
-      if (!success) {
-        res.status(400).json(error)
+      const { titulo, contenido } = req.body;
+
+      if (!titulo && !contenido) {
+        return res
+          .status(400)
+          .json({ error: "Debe enviar título o contenido para actualizar" });
       }
 
       const contenidoLimpio = sanitizarHtml(contenido);

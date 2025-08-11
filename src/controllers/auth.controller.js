@@ -1,27 +1,34 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Usuario } from "../models/auth.model.js";
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ConflictError,
-  NotFoundError,
-} from "../utils/customErrors.js";
-import { validateUsuario } from "../schemas/auth.schema.js";
+import { UserSchema, validateUser } from "../schemas/auth.schema.js";
+import ResponseHandler from "../utils/responseHandler.js";
 
 export const authController = {
   async register(req, res, next) {
     try {
-      const data = req.body;
+      const parsed = validateUser(req.body);
 
-      const { success, error, data: {nombre, email, password} } = validateUsuario(data)
-      if (!success) {
-        res.status(400).json(error)
+      if (!parsed.success) {
+        // Formateamos los errores de Zod
+        const details = parsed.error.issues.map(i => ({
+          field: i.path.join('.'),
+          code: i.code,
+          message: i.message,
+        }));
+
+        return ResponseHandler.BadRequest(
+          res,
+          'Datos inválidos en la solicitud',
+          details
+        );
       }
+
+      const { nombre, email, password } = parsed.data;
 
       const existente = await Usuario.buscarPorEmail(email);
       if (existente) {
-        throw new ConflictError("El correo ya está registrado");
+        return ResponseHandler.Conflict(res, "El correo ya está registrado");
       }
 
       const { v4: uuidv4 } = await import("uuid");
@@ -35,9 +42,10 @@ export const authController = {
         contraseña_hash: hash,
       });
 
-      res
-        .status(201)
-        .json({ message: "Usuario registrado correctamente", usuario });
+      return ResponseHandler.created(res, {
+        message: "Usuario registrado correctamente",
+        usuario,
+      });
     } catch (err) {
       next(err);
     }
@@ -47,24 +55,25 @@ export const authController = {
     try {
       const { email, password } = req.body;
 
-      // Validar que se proporcionaron email y password
       if (!email || !password) {
-        throw new BadRequestError("Email y contraseña requeridos");
+        return ResponseHandler.BadRequest(
+          res,
+          "Email y contraseña son requeridos"
+        );
       }
 
-      // Buscar usuario
       const usuario = await Usuario.buscarPorEmail(email);
-      if (!usuario) {
-        throw new UnauthorizedError("Credenciales inválidas");
-      }
+      if (!usuario) return ResponseHandler.Unauthorized(
+        res,
+        "Credenciales inválidas"
+      );
 
-      // Verificar contraseña
       const coincide = await bcrypt.compare(password, usuario.contraseña_hash);
-      if (!coincide) {
-        throw new UnauthorizedError("Credenciales inválidas");
-      }
+      if (!coincide) return ResponseHandler.Unauthorized(
+        res,
+        "Credenciales inválidas"
+      );
 
-      // Generar token
       if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET no está configurado");
       }
@@ -77,7 +86,7 @@ export const authController = {
         expiresIn: jwtExpiresIn,
       });
 
-      res.json({
+      return ResponseHandler.ok(res, {
         token,
         usuario: {
           id: usuario.id,
@@ -94,10 +103,11 @@ export const authController = {
     try {
       const { id } = req.params;
       const usuario = await Usuario.buscarPorId(id);
-      if (!usuario) {
-        throw new NotFoundError("Usuario no encontrado");
-      }
-      res.json(usuario);
+      if (!usuario) return ResponseHandler.NotFound(
+        res,
+        "Usuario no encontrado"
+      );
+      return ResponseHandler.ok(res, usuario);
     } catch (err) {
       next(err);
     }
