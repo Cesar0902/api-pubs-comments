@@ -10,10 +10,16 @@ export const publicacionesController = {
     try {
       const data = req.query
 
-      const { success, error, data: { page, limit, searchWord }} = validatePaginacion(data)
+      const { success, error, data: validatedData } = validatePaginacion(data)
       if (!success) {
-        return ResponseHandler.BadRequest(res, "Parámetros de paginación inválidos", error);
+        const formattedErrors = error.issues.map(err => ({
+          field: err.path.join('.'),
+          message: err.message
+        }));
+        return ResponseHandler.BadRequest(res, "Parámetros de paginación inválidos", formattedErrors);
       }
+
+      const { page, limit, searchWord } = validatedData;
 
       const offset = (page - 1) * limit;
 

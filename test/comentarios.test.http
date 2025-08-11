@@ -21,7 +21,7 @@ Content-Type: application/json
 ### Crear un comentario (requiere token JWT) - CAMBIAR TOKEN POR UNO VÁLIDO
 POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwOTk3MGM2LTA0MTgtNGE1Zi04MzA2LWU3YTdkYzY2NWYzZCIsImlhdCI6MTc1NDg4NzU3OSwiZXhwIjoxNzU0ODkxMTc5fQ.50AHuuICze9GenHVsFeEiZsBqovIWl_3z-yRdEKHkWU
 
 {
   "contenido": "Este es un comentario de prueba desde el archivo de tests"
