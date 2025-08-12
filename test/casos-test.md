@@ -26,16 +26,16 @@
 | 22 | Publicaciones | Eliminar publicación (autor) | DELETE | `/publicaciones/{id}` | Publicación eliminada | ✅ Exitoso |
 | 23 | Publicaciones | Eliminar sin token | DELETE | `/publicaciones/{id}` | Error - No autorizado | ✅ Exitoso |
 | 24 | Publicaciones | Eliminar publicación inexistente | DELETE | `/publicaciones/{id}` | Error - No encontrada | ✅ Exitoso |
-| 25 | Comentarios | Ver comentarios de publicación | GET | `/publicaciones/{id}/comentarios` | Lista de comentarios | Pendiente |
-| 26 | Comentarios | Ver comentarios publicación inexistente | GET | `/publicaciones/{id}/comentarios` | Error - Publicación no existe | Pendiente |
-| 27 | Comentarios | Ver comentarios ID inválido | GET | `/publicaciones/{id}/comentarios` | Error - ID inválido | Pendiente |
-| 28 | Comentarios | Crear comentario con token | POST | `/publicaciones/{id}/comentarios` | Comentario creado | Pendiente |
-| 29 | Comentarios | Crear comentario largo | POST | `/publicaciones/{id}/comentarios` | Comentario creado | Pendiente |
-| 30 | Comentarios | Crear comentario sin token | POST | `/publicaciones/{id}/comentarios` | Error - No autorizado | Pendiente |
-| 31 | Comentarios | Crear comentario sin contenido | POST | `/publicaciones/{id}/comentarios` | Error - Contenido requerido | Pendiente |
-| 32 | Comentarios | Crear comentario solo espacios | POST | `/publicaciones/{id}/comentarios` | Error - Contenido inválido | Pendiente |
-| 33 | Comentarios | Crear en publicación inexistente | POST | `/publicaciones/{id}/comentarios` | Error - Publicación no existe | Pendiente |
-| 34 | Comentarios | Crear con HTML (sanitización) | POST | `/publicaciones/{id}/comentarios` | Contenido sanitizado | Pendiente |
+| 25 | Comentarios | Ver comentarios de publicación | GET | `/publicaciones/{id}/comentarios` | Lista de comentarios | ✅ Exitoso |
+| 26 | Comentarios | Ver comentarios publicación inexistente | GET | `/publicaciones/{id}/comentarios` | Error - Publicación no existe | ✅ Exitoso |
+| 27 | Comentarios | Ver comentarios ID inválido | GET | `/publicaciones/{id}/comentarios` | Error - ID inválido | ✅ Exitoso |
+| 28 | Comentarios | Crear comentario con token | POST | `/publicaciones/{id}/comentarios` | Comentario creado | ✅ Exitoso |
+| 29 | Comentarios | Crear comentario largo | POST | `/publicaciones/{id}/comentarios` | Comentario creado | ✅ Exitoso |
+| 30 | Comentarios | Crear comentario sin token | POST | `/publicaciones/{id}/comentarios` | Error - No autorizado | ✅ Exitoso |
+| 31 | Comentarios | Crear comentario sin contenido | POST | `/publicaciones/{id}/comentarios` | Error - Contenido requerido | ✅ Exitoso |
+| 32 | Comentarios | Crear comentario solo espacios | POST | `/publicaciones/{id}/comentarios` | Error - Contenido inválido | ✅ Exitoso |
+| 33 | Comentarios | Crear en publicación inexistente | POST | `/publicaciones/{id}/comentarios` | Error - Publicación no existe | ✅ Exitoso |
+| 34 | Comentarios | Crear con HTML (sanitización) | POST | `/publicaciones/{id}/comentarios` | Contenido sanitizado | ✅ Exitoso |
 
 ## Resumen de Resultados
 
