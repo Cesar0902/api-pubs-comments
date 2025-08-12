@@ -471,6 +471,20 @@ curl -X POST http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625
 
 ## 🔧 Configuración
 
+### 🐳 Base de Datos con Docker
+
+Para ejecutar la base de datos MySQL usando Docker, desde la raíz del proyecto ejecuta:
+
+```bash
+docker compose -f 'docker-compose.yml' up -d --build
+```
+
+Este comando:
+- Levanta un contenedor MySQL 8.0 en el puerto 3307
+- Crea automáticamente la base de datos `blogdb`
+- Configura el usuario `bloguser` con contraseña `blogpass`
+- Ejecuta los scripts de inicialización desde la carpeta `init/`
+
 ### Variables de Entorno Requeridas
 ```env
 DB_HOST=localhost
