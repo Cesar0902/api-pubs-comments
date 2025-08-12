@@ -3,6 +3,7 @@ import { Comentario } from "../models/comentarios.model.js";
 import sanitizarHtml from "../utils/sanitizarHtml.js";
 import { validateComentarios } from "../schemas/comentarios.schema.js";
 import ResponseHandler from "../utils/responseHandler.js";
+import { Publicacion } from "../models/publicacion.model.js";
 
 export const comentariosController = {
   listarComentarios: async (req, res, next) => {
@@ -32,6 +33,11 @@ export const comentariosController = {
 
       const usuario_id = req.user.id;
       const publicacion_id = req.params.id;
+
+      const publicacion = await Publicacion.buscarPorId(publicacion_id);
+      if (!publicacion) {
+        return ResponseHandler.NotFound(res, "Publicación no encontrada");
+      }
 
       const id = uuidv4();
       const contenidoLimpio = sanitizarHtml(contenido);

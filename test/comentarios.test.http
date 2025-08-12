@@ -73,7 +73,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ###
 
 ### Crear comentario en publicación inexistente (debería fallar)
-POST http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000/comentarios
+POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fd/comentarios
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
 
