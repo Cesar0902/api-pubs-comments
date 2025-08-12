@@ -34,7 +34,8 @@ export const publicacionesController = {
 
       return ResponseHandler.ok(res, { page, limit, total, publicaciones });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al listar publicaciones");
+      next();
     }
   },
 
@@ -56,7 +57,8 @@ export const publicacionesController = {
       }
       return ResponseHandler.ok(res, publicacion);
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al ver publicación");
+      next();
     }
   },
 
@@ -89,7 +91,8 @@ export const publicacionesController = {
 
       return ResponseHandler.created(res, { message: "Publicación creada", id });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al crear publicación");
+      next();
     }
   },
 
@@ -118,7 +121,8 @@ export const publicacionesController = {
 
       return ResponseHandler.ok(res, { message: "Publicación actualizada" });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al actualizar publicación");
+      next();
     }
   },
 
@@ -139,7 +143,8 @@ export const publicacionesController = {
 
       return ResponseHandler.ok(res, { message: "Publicación eliminada" });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al eliminar publicación");
+      next();
     }
   },
 };

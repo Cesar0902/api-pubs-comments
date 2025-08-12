@@ -41,7 +41,8 @@ export const authController = {
         usuario,
       });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al registrar usuario");
+      next();
     }
   },
 
@@ -89,7 +90,8 @@ export const authController = {
         },
       });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al iniciar sesión");
+      next();
     }
   },
 
@@ -103,7 +105,8 @@ export const authController = {
       );
       return ResponseHandler.ok(res, usuario);
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al obtener usuario");
+      next();
     }
   },
 };

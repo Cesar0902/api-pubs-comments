@@ -1,7 +1,8 @@
 ### Pruebas de Comentarios
 
 ### Ver comentarios de una publicación (ruta pública)
-GET http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+GET http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fg/comentarios
+# b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc
 Content-Type: application/json
 
 ###

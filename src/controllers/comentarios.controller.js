@@ -8,11 +8,18 @@ import { Publicacion } from "../models/publicacion.model.js";
 export const comentariosController = {
   listarComentarios: async (req, res, next) => {
     try {
+      const publicacion_id = req.params.id;
+      const publicacion = await Publicacion.buscarPorId(publicacion_id);
+      if (!publicacion) {
+        return ResponseHandler.NotFound(res, "Publicación no encontrada");
+      }
+
       const { id } = req.params;
       const comentarios = await Comentario.listarPorPublicacion(id);
       return ResponseHandler.ok(res, comentarios);
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al listar comentarios");
+      next();
     }
   },
 
@@ -46,7 +53,8 @@ export const comentariosController = {
 
       return ResponseHandler.created(res, { message: "Comentario creado", id });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al crear comentario");
+      next();
     }
   },
 
@@ -67,7 +75,8 @@ export const comentariosController = {
 
       return ResponseHandler.ok(res, { message: "Comentario eliminado" });
     } catch (err) {
-      next(err);
+      ResponseHandler.Internal(res, "Error al eliminar comentario");
+      next();
     }
   },
 };
