@@ -42,12 +42,12 @@ GET http://localhost:5000/publicaciones/id-invalido
 
 ### Crear publicación (requiere token) - CAMBIAR TOKEN POR UNO VÁLIDO
 POST http://localhost:5000/publicaciones
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwOTk3MGM2LTA0MTgtNGE1Zi04MzA2LWU3YTdkYzY2NWYzZCIsImlhdCI6MTc1NDg5MTAzNiwiZXhwIjoxNzU0ODk0NjM2fQ.JJWHm-6QQL-0oWj_t0ZQbTHLgsMdxLSC32JMUy3jg-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
 Content-Type: application/json
 
 {
-  "titulo": "Mi primera publicación de prueba",
-  "contenido": "Contenido de prueba para la publicación número uno actua"
+  "titulo": "Nextjs y Nestjs - Aplicación CRUD (con Typescript, Shadcn, prisma y más)",
+  "contenido": "Esta es una publicación de prueba sobre Nextjs y Nestjs."
 }
 
 ###

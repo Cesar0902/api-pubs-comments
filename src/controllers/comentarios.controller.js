@@ -19,10 +19,16 @@ export const comentariosController = {
     try {
       const data = req.body;
 
-      const { success, error, data: { contenido } } = validateComentarios(data)
+      const { success, error, data: validatedData } = validateComentarios(data)
       if (!success) {
-          return ResponseHandler.BadRequest(res, "Datos de comentario inválidos", error);
+        const formattedErrors = error.issues.map(err => ({
+          field: err.path.join('.'),
+          message: err.message
+        }));
+        return ResponseHandler.BadRequest(res, "Datos de comentario inválidos", formattedErrors);
       }
+
+      const { contenido } = validatedData;
 
       const usuario_id = req.user.id;
       const publicacion_id = req.params.id;
