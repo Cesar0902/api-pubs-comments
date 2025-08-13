@@ -1,7 +1,7 @@
 ### Pruebas de Comentarios
 
 ### Ver comentarios de una publicación (ruta pública)
-GET http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fg/comentarios
+GET http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 # b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc
 Content-Type: application/json
 
@@ -20,9 +20,9 @@ Content-Type: application/json
 ###
 
 ### Crear un comentario (requiere token JWT) - CAMBIAR TOKEN POR UNO VÁLIDO
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+POST http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": "Que crack hermano, explicas muy  bien y se entiende todo el desarrollo de codigo"
@@ -33,7 +33,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ### Crear comentario con contenido más largo
 POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": "Este es un comentario más largo para probar el sistema de comentarios. Incluye múltiples oraciones y busca validar que el contenido se guarde correctamente en la base de datos."
@@ -42,7 +42,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ###
 
 ### Crear comentario sin token (debería fallar)
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+POST http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 Content-Type: application/json
 
 {
@@ -52,9 +52,9 @@ Content-Type: application/json
 ###
 
 ### Crear comentario sin contenido (debería fallar)
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+POST http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": ""
@@ -63,9 +63,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ###
 
 ### Crear comentario con contenido solo espacios (debería fallar)
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+POST http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": "  "
@@ -74,9 +74,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ###
 
 ### Crear comentario en publicación inexistente (debería fallar)
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fd/comentarios
+POST http://localhost:5000/publicaciones/b2274ff3-c02d-4d8d-94ac-0ebd0e3495fd/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": "Este comentario no debería crearse porque la publicación no existe"
@@ -85,10 +85,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4L
 ###
 
 ### Crear comentario con contenido que incluye HTML para probar sanitización
-POST http://localhost:5000/publicaciones/b2174ff3-c02d-4d8d-94ac-0ebd0e3495fc/comentarios
+POST http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6/comentarios
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExOTUzMSwiZXhwIjoxNzU1MTMwMzMxfQ.hdTcbr3q-lrK5XSQ2O1F-H-_hZ4IXlX5zsgexv8Mp3w
 
 {
   "contenido": "Este comentario tiene <script>alert('XSS')</script> HTML"
 }
+
+###

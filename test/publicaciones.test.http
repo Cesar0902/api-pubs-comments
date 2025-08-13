@@ -16,17 +16,17 @@ GET http://localhost:5000/publicaciones
 ###
 
 ### Buscar publicaciones por palabra clave
-GET http://localhost:5000/publicaciones?searchWord=API
+GET http://localhost:5000/publicaciones?searchWord=Segunda
 
 ###
 
-### Buscar publicaciones por otra palabra clave
-GET http://localhost:5000/publicaciones?searchWord=prueba
+### Buscar publicaciones por otra palabra clave (SIN RESULTADOS)
+GET http://localhost:5000/publicaciones?searchWord=nohaypalabra
 
 ###
 
 ### Ver publicación por ID válido
-GET http://localhost:5000/publicaciones/feab7616-44d8-4da6-92db-513418595d6d
+GET http://localhost:5000/publicaciones/57ed0db4-0e4b-4747-88a0-72e6b2e5fcd6
 
 ###
 
@@ -42,7 +42,7 @@ GET http://localhost:5000/publicaciones/id-invalido
 
 ### Crear publicación (requiere token) - CAMBIAR TOKEN POR UNO VÁLIDO
 POST http://localhost:5000/publicaciones
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODIxYTM4LTczYWUtNGMyMS1hNDFjLTRjMmFiZWQxMWU2YyIsImlhdCI6MTc1NDk2ODY1NywiZXhwIjoxNzU0OTcyMjU3fQ.jd9BQVHWQgk5YepEUnmad2tPCrx57fDUSrIcq1muH9U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
 Content-Type: application/json
 
 {
@@ -65,7 +65,7 @@ Content-Type: application/json
 
 ### Crear publicación con datos faltantes (debería fallar)
 POST http://localhost:5000/publicaciones
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwOTk3MGM2LTA0MTgtNGE1Zi04MzA2LWU3YTdkYzY2NWYzZCIsImlhdCI6MTc1NDg5MTAzNiwiZXhwIjoxNzU0ODk0NjM2fQ.JJWHm-6QQL-0oWj_t0ZQbTHLgsMdxLSC32JMUy3jg-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
 Content-Type: application/json
 
 {
@@ -75,8 +75,8 @@ Content-Type: application/json
 ###
 
 ### Editar publicación (requiere token y ser autor) - CAMBIAR ID Y TOKEN POR VÁLIDOS
-PUT http://localhost:5000/publicaciones/de6d2eca-4336-47a2-8940-102ab7c96b5b
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwOTk3MGM2LTA0MTgtNGE1Zi04MzA2LWU3YTdkYzY2NWYzZCIsImlhdCI6MTc1NDg5MTAzNiwiZXhwIjoxNzU0ODk0NjM2fQ.JJWHm-6QQL-0oWj_t0ZQbTHLgsMdxLSC32JMUy3jg-4
+PUT http://localhost:5000/publicaciones/117f677b-0113-42b4-9102-21e01685ea05
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
 Content-Type: application/json
 
 {
@@ -99,7 +99,7 @@ Content-Type: application/json
 
 ### Editar publicación de otro usuario (debería fallar)
 PUT http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da
-Authorization: Bearer TOKEN_DE_OTRO_USUARIO
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
 Content-Type: application/json
 
 {
@@ -110,8 +110,14 @@ Content-Type: application/json
 ###
 
 ### Eliminar publicación (requiere token y ser autor) - CAMBIAR ID Y TOKEN POR VÁLIDOS
-DELETE http://localhost:5000/publicaciones/feab7616-44d8-4da6-92db-513418595d6d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwOTk3MGM2LTA0MTgtNGE1Zi04MzA2LWU3YTdkYzY2NWYzZCIsImlhdCI6MTc1NDg5MzU4OCwiZXhwIjoxNzU0ODk3MTg4fQ.sEyCpKwUgNzED-iHBH73OJYq-tAKXAY-01NMIYT9npY
+DELETE http://localhost:5000/publicaciones/276230a9-4e6e-4f06-94fd-c0ff625d64da
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
+
+###
+
+### Eliminar publicación de otro autor (requiere token y no ser autor) - CAMBIAR ID Y TOKEN POR VÁLIDOS
+DELETE http://localhost:5000/publicaciones/117f677b-0113-42b4-9102-21e01685ea05
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y
 
 ###
 
@@ -122,4 +128,4 @@ DELETE http://localhost:5000/publicaciones/feab7616-44d8-4da6-92db-513418595d6d
 
 ### Eliminar publicación inexistente (debería fallar)
 DELETE http://localhost:5000/publicaciones/00000000-0000-0000-0000-000000000000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ1N2I0ZmVlLWE1NDMtNDQyZi1hMDI1LTg5MzVmMjIyNmNhNiIsImlhdCI6MTc1NDI3Njg3NCwiZXhwIjoxNzU0Mjg3Njc0fQ.k0DdkW_ELVQACVIrEzanDpU8IRa6iw4-2naQmUvvTMg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2NjY2OTAxLTA5MDAtNDJhZC05ODA3LTZhNmY2ZmVmOWZjMCIsImlhdCI6MTc1NTExODU1NCwiZXhwIjoxNzU1MTI5MzU0fQ.d1TmqiJoaLLpmf_RXW4LFOzzcwZU92j6cm0AYFc4w-Y

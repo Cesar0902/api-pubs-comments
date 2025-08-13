@@ -487,13 +487,14 @@ Este comando:
 
 ### Variables de Entorno Requeridas
 ```env
-DB_HOST=localhost
-DB_USER=usuario
-DB_PASSWORD=password
-DB_NAME=nombre_base_datos
-JWT_SECRET=tu_jwt_secret_muy_seguro
-JWT_EXPIRES_IN=24h
 PORT=5000
+DB_HOST=localhost
+DB_PORT=3307
+DB_USER=bloguser
+DB_PASSWORD=blogpass
+DB_NAME=blogdb
+JWT_SECRET=Tengo_la_camisa_negra
+JWT_EXPIRES_IN=3h
 ```
 
 ---

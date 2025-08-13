@@ -5,8 +5,8 @@ POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-  "nombre": "David Gevawer2",
-  "email": "david2@example.com",
+  "nombre": "Juan Alvarenga",
+  "email": "JuanA@example.com",
   "password": "miPassword123@"
 }
 
@@ -17,9 +17,9 @@ POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-  "nombre": "Juan Perez",
+  "nombre": "Josué Lara",
   "email": "david@example.com",
-  "password": "otraPassword456"
+  "password": "otraPassword456%"
 }
 
 ###
@@ -40,8 +40,8 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-  "email": "marcelo.martinez@gmail.com",
-  "password": "#Te4moDenisse"
+  "email": "josue@example.com",
+  "password": "miPassword123@"
 }
 
 ###
